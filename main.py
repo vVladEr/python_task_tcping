@@ -3,7 +3,7 @@ from arp_parser import get_args_parser
 from tcp_pinger import TcPinger
 from input_checker import  check_input
 
-logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
+#logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 
 parser = get_args_parser()
 args = parser.parse_args()
