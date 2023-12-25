@@ -1,14 +1,23 @@
-import logging
 from arp_parser import get_args_parser
 from tcp_pinger import TcPinger
-from input_checker import  check_input
+from input_checker import check_input, parse_watchdog_ports
 
-#logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 
 parser = get_args_parser()
 args = parser.parse_args()
+ports = []
+break_flag = False
+if args.watchdog is not None:
+    error, ports = parse_watchdog_ports(args.watchdog)
+    args.inf_ping = True
+    if error:
+        print("Wrong watchdog ports format")
+        exit()
+
 if check_input(args):
-    pinger = TcPinger(args.IP, args.port, args.ping_timeout,
+    if len(ports) == 0:
+        ports = [args.port]
+    pinger = TcPinger(args.IP, ports, args.ping_timeout,
                       args.ping_delay, args.num_ping, args.inf_ping)
     try:
         pinger.start_ping()
