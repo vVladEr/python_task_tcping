@@ -20,31 +20,26 @@ def check_param(param: int) -> bool:
     return param >= 0
 
 
-def parse_watchdog_ports(ports: list[str]) -> (bool, list[int]):
-    res = []
+def parse_ports(ports: list[str]) -> (bool, set[int]):
+    res = set()
     try:
         for line in ports:
             if "-" in line:
                 temp = line.split("-")
                 begin = int(temp[0])
-                print(begin)
                 end = int(temp[1])
-                print(end)
                 for i in range(begin, end+1):
-                    res.append(i)
+                    res.add(i)
             else:
-                res.append(int(line))
+                res.add(int(line))
         return False, res
     except ValueError:
-        return True, res
+        return True, set()
 
 
 def check_input(args):
     if not check_ipv4(args.IP):
         print("Wrong IP addr format")
-        return False
-    if not check_port(args.port):
-        print("Wrong port argument")
         return False
     if not check_param(args.ping_timeout):
         print("Wrong ping timeout argument")
